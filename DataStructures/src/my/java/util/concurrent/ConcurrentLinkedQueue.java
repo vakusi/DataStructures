@@ -32,6 +32,10 @@ public class ConcurrentLinkedQueue<T> implements Iterable{
 		}
 	}
 
+	/**Non blocking offer method. 
+	 * @param o
+	 * @return
+	 */
 	public boolean offer(T o) {
 		boolean result = false;
 		Node<T> newNode = new Node<T>(o);
@@ -60,6 +64,9 @@ public class ConcurrentLinkedQueue<T> implements Iterable{
 		return result;
 	}
 
+	/**Non-blocking poll method.
+	 * @return
+	 */
 	public T poll() {
 		T result = null;
 		if (head.get() == null) {
@@ -76,6 +83,11 @@ public class ConcurrentLinkedQueue<T> implements Iterable{
 		return result;
 	}
 
+	/**
+	 * Test program
+	 * @param args
+	 * @throws InterruptedException
+	 */
 	public static void main(String args[]) throws InterruptedException {
 		ConcurrentLinkedQueue<Long> myQueue = new ConcurrentLinkedQueue<Long>();
 		final class SimpleRunnable implements Runnable {
@@ -113,17 +125,7 @@ public class ConcurrentLinkedQueue<T> implements Iterable{
 		}
 		latch.await();
 		executors.shutdown();
-		
-		// Read through the queue
-//		Long result = myQueue.poll();
-//		int counter = 0;
-//		while(result!=null)
-//		{
-//			System.out.println(result);
-//			result = myQueue.poll();
-//			counter++;
-//		}
-		//System.out.println(counter);
+
 		Iterator<Node<Long>> itr = myQueue.iterator();
 		while(itr.hasNext())
 		{
@@ -137,6 +139,11 @@ public class ConcurrentLinkedQueue<T> implements Iterable{
 		return new MyIterator<T>();
 	}
 	
+	/**
+	 * Iterator for this collection.
+	 *
+	 * @param <T>
+	 */
 	class MyIterator<T> implements Iterator
 	{
 		Node<T> current = (Node<T>) head.get();
